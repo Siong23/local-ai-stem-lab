@@ -1,0 +1,7 @@
+{
+  "group_id": "GROUP01",
+  "mqtt_host": "192.168.0.x",
+  "mqtt_port": 1883,
+  "serial_port": "auto",
+  "serial_baud": 115200
+}
