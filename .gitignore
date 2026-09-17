@@ -1,0 +1,11 @@
+# Python build and virtual environment outputs
+.venv/
+__pycache__/
+*.pyc
+build/
+dist/
+*.spec
+
+# Configuration entries containing passwords/IPs
+.env
+bridge-config.json
