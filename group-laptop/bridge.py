@@ -20,7 +20,7 @@ with CONFIG_PATH.open("r", encoding="utf-8-sig") as handle:
     CONFIG = json.load(handle)
 
 GROUP_ID = str(CONFIG["group_id"]).upper()
-MQTT_HOST = str(CONFIG.get("mqtt_host", "192.168.0.195"))
+MQTT_HOST = str(CONFIG.get("mqtt_host", "192.168.50.10"))
 MQTT_PORT = int(CONFIG.get("mqtt_port", 1883))
 SERIAL_BAUD = int(CONFIG.get("serial_baud", 115200))
 
