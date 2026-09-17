@@ -53,7 +53,6 @@ def find_microbit_port():
 SERIAL_PORT = find_microbit_port()
 commands = queue.Queue(maxsize=20)
 
-# 🔧 修正 1：完美单行初始化，关闭导致 Windows/Anaconda 下硬件死锁的流控引脚
 serial_link = serial.Serial(SERIAL_PORT, SERIAL_BAUD, timeout=0.5, write_timeout=2, rtscts=False, dsrdtr=False)
 serial_link.dtr = False
 serial_link.rts = False
@@ -86,7 +85,6 @@ def encode_command(command, request_id):
     return b"~\n" + line + b"\n"
 
 def decode_reply(line, command, request_id):
-    # 🔧 修正 2：修复 acsii 拼写错误与非法的斜杠 /split，并清洗 Windows 行尾残留
     clean_line = line.decode("ascii", errors="ignore").replace("\r", "").replace("\n", "").strip()
     fields = clean_line.split("|")
     
@@ -96,7 +94,6 @@ def decode_reply(line, command, request_id):
     if fields[1] == "ERR":
         return {**reply, "status": "error", "error": "micro:bit: " + fields[2]}
         
-    # 🔧 修正 3：移除原版在这里强行 raise 报错的恶性 Bug
     if fields[1] != "OK":
         raise ValueError("Invalid serial status")
         
@@ -121,7 +118,6 @@ def decode_reply(line, command, request_id):
     elif action == "play_tone":
         result = {"frequency": int(values[0]), "duration_ms": int(values[1])}
     else:
-        # 🔧 修正 4：修改 "Pong" 为全大写 "PONG"，匹配固件端输入
         if values != ["PONG", "1.2"]:
             raise ValueError("Firmware version mismatch; reflash version 1.2")
         result = {"firmware": "1.2"}
@@ -135,7 +131,6 @@ def serial_request(command, request_id):
     
     while time.monotonic() < deadline:
         if serial_link.in_waiting > 0:
-            # 🔧 修正 5：修复原版未定义 raw_line 变量便直接使用的致命逻辑错误
             raw_line = serial_link.readline()
             if raw_line:
                 reply = decode_reply(raw_line, command, request_id)
@@ -144,7 +139,6 @@ def serial_request(command, request_id):
         time.sleep(0.01)
     raise TimeoutError("micro:bit timeout; check firmware 1.2 and USB")
 
-# 🚀 强制在握手前冲刷微控制器可能在冷启动时积攒的乱码
 serial_link.write(b"\n~\n~\n")
 serial_link.flush()
 time.sleep(0.5)
@@ -154,7 +148,6 @@ try:
     probe = serial_request({"action": "ping"}, "0")
     print("Firmware ready: 1.2 (text serial protocol)")
 except TimeoutError:
-    # 终极课堂保障机制：如果冷启动硬件反应慢，跳过崩溃，强行推进到 MQTT 监听
     print("[Skip Warning] Hardware handshake probe timed out; forcibly starting the MQTT listening layer...")
 
 def publish_status(state):
