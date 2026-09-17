@@ -91,4 +91,4 @@ To automate group routing dynamically without duplicating massive logic forks, c
 | `group_id` | `GROUP01` | Group tag identification mapping (Update manually per dynamic graph duplicate fork). |
 
 ---
-⚠️ **Docker Container Deployment Warning:** If you subsequently package this pipeline workspace into isolated Docker instances, loopback strings like `127.0.0.1` will look inside the container itself instead of the root machine. Adjust backend target paths to `host.docker.internal` or active docker host bridge gateways as necessary.
+**Docker Container Deployment Warning:** If you subsequently package this pipeline workspace into isolated Docker instances, loopback strings like `127.0.0.1` will look inside the container itself instead of the root machine. Adjust backend target paths to `host.docker.internal` or active docker host bridge gateways as necessary.
