@@ -26,7 +26,7 @@ The system enables a visual LLM orchestration layer (Flowise) to sense the physi
 * `docs/`: Automated environment verification suites (`verify_stack.py`) and standard lesson run-sheets.
 
 ## Networking Prerequisite (IP Configuration)
-Before deploying the classroom stack, you **must substitute the reference IP address (`192.168.50.10` / `192.168.0.x`) with your own central server's actual local IP address** across the following initialization files:
+Before deploying the classroom stack, you **must substitute the reference IP address (`192.168.50.10`) with your own central server's actual local IP address** across the following initialization files:
 1. **Gateway Environment:** Update `MQTT_HOST` in `central-server/gateway/.env`
 2. **Flowise JavaScript Tools:** Update `gateway_url` inside the script logic for both sensor and control nodes.
 3. **Group Configurations:** Update `mqtt_host` in each group's local client `bridge-config.json` before distributing the client application bundle to the student laptops.
